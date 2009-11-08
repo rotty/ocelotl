@@ -168,7 +168,7 @@
          (lose/type))))
 
 (define (http-response/status-type response)
-  (case (mod (http-response/status-code response) 100)
+  (case (div (http-response/status-code response) 100)
     ((1) 'informational)
     ((2) 'success)
     ((3) 'redirection)
