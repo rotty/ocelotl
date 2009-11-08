@@ -67,13 +67,15 @@
           (srfi :9 records)
           (only (srfi :13) string-index substring/shared string-map)
           (srfi :14 char-sets)
-          (only (srfi :43 vectors) vector-any)
+          (srfi :67 compare-procedures)
           (only (spells misc) and=>)
           (spells finite-types)
+          (spells foof-loop)
           (spells string-utils)
+          (spells array-search)
           (spells tracing)
-          (spenet pct-coding)
-          (spenet uri))
+          (ocelotl net pct-coding)
+          (ocelotl net uri))
 
 ;;;; Header Fields
 
@@ -259,16 +261,18 @@
    (gateway-timeout     504 "Gateway Timeout")))
 
 (define (symbol->http-status symbol)
-  (vector-any (lambda (status)
-                (and (eq? (http-status/name status) symbol)
-                     status))
-              http-status-vector))
+  (loop continue ((for status (in-vector http-status-vector)))
+    (cond ((eq? (http-status/name status) symbol)
+           status)
+          (else
+           (continue)))))
 
 (define (integer->http-status code)
-  (vector-any (lambda (status)
-                (and (= (http-status/code status) code)
-                     status))
-              http-status-vector))
+  (vector-binary-search (lambda (status code)
+                          (number-compare (http-status/code status) code))
+                        http-status-vector
+                        (lambda (i status)
+                          status)))
 
 (define-condition-type &http-error &error
   make-http-error http-error?
@@ -292,7 +296,8 @@
 )
 
 ;; Local Variables:
-;; scheme-indent-styles: ((define-record-type 3)
+;; scheme-indent-styles: (foof-loop
+;;                        (define-record-type 3)
 ;;                        (finite-type-case 2)
 ;;                        (let-args 2)
 ;;                        (match 1))
