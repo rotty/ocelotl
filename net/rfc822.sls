@@ -17,6 +17,7 @@
 
 (library (ocelotl net rfc822)
   (export read-rfc822-headers
+          read-rfc822-headers-with-line-breaks
           time-utc->rfc822-string
           rfc822-malformed-headers-condition?)
   (import (rnrs)
@@ -46,18 +47,18 @@
            (list (parse-error/position perror)
                  (parse-error/messages perror))))))
 
-(define (read-rfc822-headers port)
-  (let ((parse-input (if (textual-port? port)
-                         parse-input-chars
-                         parse-input-bytes-as-latin1)))
-    (parse-input rfc822-parser:header-fields
-                 port
-                 #f
-                 (lambda (headers context stream)
-                   headers)
-                 (lambda (perror context stream)
-                   (raise-rfc822-malformed-headers 'read-rfc822-headers
-                                                   perror)))))
+(define (make-rfc822-header-reader who parser)
+  (lambda (port)
+    (let ((parse-input (if (textual-port? port)
+                           parse-input-chars
+                           parse-input-bytes-as-latin1)))
+      (parse-input parser
+                   port
+                   #f
+                   (lambda (headers context stream)
+                     headers)
+                   (lambda (perror context stream)
+                     (raise-rfc822-malformed-headers who perror))))))
 
 (define rfc822-date-fmt "~a, ~d ~b ~Y ~H:~M:~S GMT")
 
@@ -67,15 +68,17 @@
 
 ;;;;;; Parsing Header Fields
 
-(define-parser rfc822-parser:header-fields
-  (parser:list:repeated-until rfc822-parser:crlf rfc822-parser:header-field))
+(define-parser (rfc822-parser:header-fields transform-value)
+  (parser:list:repeated-until
+      (parser:choice rfc822-parser:crlf (parser:end))
+    (rfc822-parser:header-field transform-value)))
 
-(define-parser rfc822-parser:header-field
+(define-parser (rfc822-parser:header-field transform-value)
   (*parser
       (name rfc822-parser:header-field-name)
       (value rfc822-parser:header-field-value)
     (parser:return
-     (cons name value))))
+     (cons name (transform-value value)))))
 
 (define-parser rfc822-parser:header-field-name
   (parser:map (lambda (s)
@@ -89,12 +92,7 @@
       (continuation-lines
        (parser:list:repeated rfc822-parser:header-field-continuation-line))
     (parser:return
-     ;++ I wonder whether it would be better to have header fields map
-     ;++ names to *lists* of values, for each separate line.  I don't
-     ;++ think that the intent of the HTTP RFC is for implementations
-     ;++ to distinguish this, but it would not surprise me if certain
-     ;++ protocols did.
-     (string-join/infix " " (cons initial-line continuation-lines)))))
+     (cons initial-line continuation-lines))))
 
 (define-parser rfc822-parser:header-field-initial-line
   (parser:sequence rfc822-parser:lws* rfc822-parser:header-field-line))
@@ -144,8 +142,17 @@
 
 ;;;; Utilities
 
-(define (string-join/infix separator strings)
-  (string-join strings separator 'infix))
+(define read-rfc822-headers
+  (make-rfc822-header-reader 'read-rfc822-headers
+                             (rfc822-parser:header-fields
+                              (lambda (lines)
+                                (string-join lines " ")))))
+
+(define read-rfc822-headers-with-line-breaks
+  (make-rfc822-header-reader 'read-rfc822-headers
+                             (rfc822-parser:header-fields
+                              (lambda (lines)
+                                lines))))
 
 )
 
