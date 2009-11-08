@@ -101,9 +101,10 @@
       (lambda (connection)
         (send-http-request connection method uri header-fields body)
         (close-port (http-connection/output-port connection))
-        (receiver (receive-http-response connection)
-                  (http-connection/input-port connection))
-        (close-connection (http-connection/connection connection))))))
+        (receive results (receiver (receive-http-response connection)
+                                   (http-connection/input-port connection))
+          (close-connection (http-connection/connection connection))
+          (apply values results))))))
 
 (define $default-http-uri-authority (make-parameter #f))
 (define (default-http-uri-authority) ($default-http-uri-authority))
