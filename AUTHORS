@@ -1,0 +1,18 @@
+# -*- idented-test -*-
+
+Project Maintainer:  Andreas Rottmann <a.rottmann@gmx.at>
+
+In the following, the files of the spells project are listed, grouped
+by copyright holders and licenses; roughly following the DEP-5
+proposed syntax (http://dep.debian.net/deps/dep5/).
+
+
+# Libraries
+
+Copyright: 2005-2009, Andreas Rottmann <a.rottmann@gmx.at>
+Files: *
+License: BSD
+
+
+# Test suite
+
