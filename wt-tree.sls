@@ -1,6 +1,6 @@
 ;;; wt-tree.sls --- R6RS port of MIT/GNU Scheme's weight-balanced trees
 
-;; Copyright (C) 2009 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2009, 2010 Andreas Rottmann <a.rottmann@gmx.at>
 ;;
 ;; Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994,
 ;;     1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
@@ -72,7 +72,11 @@
           wt-tree/min-datum
           wt-tree/min-pair
           wt-tree/delete-min
-          wt-tree/delete-min!)
+          wt-tree/delete-min!
+
+          ;; ocelotl extras
+          wt-tree/update
+          )
   (import (rnrs))
 
 ;;;  A tree type is a collection of those procedures that depend on the ordering
@@ -666,5 +670,16 @@
   ((lambda()
      (make-wt-tree-type  string<?))))
 
+
+
+;;; Extras
+
+(define (wt-tree/update tree key updater default)
+  (let ((datum (wt-tree/lookup tree key %not-found)))
+    (wt-tree/add tree key (updater (if (eq? datum %not-found)
+                                       default
+                                       datum)))))
+
+(define %not-found (list '%not-found))
 
 )
