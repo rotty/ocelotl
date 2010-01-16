@@ -73,11 +73,11 @@
     string->uri-path
     maybe-string->uri-path
     )
-  (import (except (rnrs base)
-                  error
-                  string-copy
-                  string->list
-                  string-for-each)
+  (import (rename (except (rnrs base)
+                          string-copy
+                          string->list
+                          string-for-each)
+                  (error rnrs:error))
           (rnrs unicode)
           (rnrs control)
           (rnrs hashtables)
@@ -118,9 +118,11 @@
              => weak-cell-ref)
             (else #f)))
 
-    (define error (make-error-signaller "spenet.uri"))
+    (define (error message object context)
+      (rnrs:error context message object))
+    
     (define (write-string s port)
       (put-string port s))
     
-    (include-file ((ocelotl net private) uri))
+    (include-file/downcase ((ocelotl net private) uri))
   )

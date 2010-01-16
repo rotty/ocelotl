@@ -970,12 +970,12 @@
     (cond ((char-numeric?    char) (- code (char->ascii #\0)))
           ((char-upper-case? char) (- (+ code #xA) (char->ascii #\A)))
           ((char-lower-case? char) (- (+ code #xA) (char->ascii #\a)))
-          (else (error "Invalid hex digit character:" char)))))
+          (else (error "Invalid hex digit character:" char 'CHAR->HEX-DIGIT)))))
 
 (define (hex-digit->char value)
   (cond ((< value #xA) (ascii->char (+ value (char->ascii #\0))))
         ((< value #x10) (ascii->char (+ (- value #xA) (char->ascii #\A))))
-        (else (error "Invalid hex digit value:" value))))
+        (else (error "Invalid hex digit value:" value 'HEX-DIGIT->CHAR))))
 
 (define-parser uri-parser:hex-digit
   (*parser (char (parser:char-in-set char-set:hex-digit))
