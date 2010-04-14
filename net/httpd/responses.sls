@@ -34,7 +34,7 @@
           (ocelotl net uri)
           (ocelotl net http)
           (ocelotl net httpd)
-          (xitomatl ssax extras))
+          (ocelotl ssax-utils))
 
 (define-record-type input-response
   (fields handler))
