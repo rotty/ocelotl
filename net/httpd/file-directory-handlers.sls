@@ -1,6 +1,6 @@
 ;;; file-directory-handlers.sls --- 
 
-;; Copyright (C) 2009 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2009, 2010 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; This file is based on code from the Scheme Untergrund Networking
 ;; package,
@@ -29,7 +29,7 @@
                   define-record-type
                   file-exists? delete-file)
           (only (srfi :13) string-join)
-          (spells foof-loop)
+          (wak foof-loop)
           (spells filesys)
           (spells record-types)
           (spells pathname)

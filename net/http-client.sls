@@ -1,6 +1,6 @@
 ;;; http-client.sls --- Simple HTTP client library
 
-;; Copyright (C) 2005,2009 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2005,2009,2010 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; Based on Public Domain code written by Taylor R. Campbell.
 
@@ -39,13 +39,13 @@
     (only (srfi :13) string-join string-trim-right)
     (srfi :14 char-sets)
     (srfi :39 parameters)
+    (wak riastreams)
+    (wak foof-loop)
+    (wak foof-loop nested)
+    (wak parscheme parse-errors)
+    (wak parscheme parser-combinators)
+    (wak parscheme text-parser-combinators)
     (spells network)
-    (spells lazy-streams)
-    (spells foof-loop)
-    (spells nested-foof-loop)
-    (parscheme parse-errors)
-    (parscheme parser-combinators)
-    (parscheme text-parser-combinators)
     (ocelotl parser-utils)
     (ocelotl net rfc822)
     (ocelotl net http)

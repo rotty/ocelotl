@@ -1,6 +1,6 @@
 ;;; http.sls --- HTTP data types
 
-;; Copyright (C) 2009 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2009, 2010 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; Author: Andreas Rottmann <a.rottmann@gmx.at>
 
@@ -70,7 +70,7 @@
           (srfi :67 compare-procedures)
           (only (spells misc) and=>)
           (spells finite-types)
-          (spells foof-loop)
+          (wak foof-loop)
           (spells string-utils)
           (spells array-search)
           (spells tracing)

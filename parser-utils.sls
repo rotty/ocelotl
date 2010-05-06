@@ -1,6 +1,6 @@
 ;;; parser-utils.sls --- Parscheme utilities
 
-;; Copyright (C) 2009 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2009, 2010 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; Author: Andreas Rottmann <a.rottmann@gmx.at>
 
@@ -18,9 +18,9 @@
 (library (ocelotl parser-utils)
   (export parse-input-bytes-as-latin1)
   (import (rnrs)
-          (spells lazy)
-          (spells lazy-streams)
-          (parscheme parser-combinators))
+          (srfi :45 lazy)
+          (wak riastreams)
+          (wak parscheme parser-combinators))
 
 (define (parse-input-bytes-as-latin1 parser input-port context win lose)
   (parse-stream parser

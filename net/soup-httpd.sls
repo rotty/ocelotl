@@ -33,7 +33,7 @@
           (spells logging)
           (spells operations)
           (spells tracing)
-          (spells foof-loop)
+          (wak foof-loop)
           (sbank soup)
           (sbank glib)
           (sbank glib-daemon)

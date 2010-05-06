@@ -1,6 +1,6 @@
 ;;; uri.sls --- URI abstraction
 
-;; Copyright (C) 2009 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2009, 2010 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; Author: Andreas Rottmann <a.rottmann@gmx.at>
 
@@ -89,15 +89,15 @@
           (only (srfi :13 strings) string-downcase!)
           (srfi :14 char-sets)
           (spells ascii)
-          (spells foof-loop)
+          (wak foof-loop)
           (spells gc)
           (only (spells error) make-error-signaller)
           (spells include)
-          (parscheme matcher-combinators)
-          (parscheme text-matcher-combinators)
-          (parscheme parser-combinators)
-          (parscheme text-parser-combinators)
-          (parscheme parse-errors))
+          (wak parscheme matcher-combinators)
+          (wak parscheme text-matcher-combinators)
+          (wak parscheme parser-combinators)
+          (wak parscheme text-parser-combinators)
+          (wak parscheme parse-errors))
 
     ;++ This is bogus.  Also, `internment camp' might, just might, not
     ;++ be quite the right name, but it works for now.

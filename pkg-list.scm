@@ -1,7 +1,9 @@
 (package (ocelotl (0))
   (depends (srfi)
            (spells)
-           (parscheme))
+           (wak-riastreams)
+           (wak-foof-loop)
+           (wak-parscheme))
   (libraries
    (exclude ("net" "soup-httpd.sls"))
    (sls -> "ocelotl")

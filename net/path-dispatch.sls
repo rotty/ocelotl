@@ -1,6 +1,6 @@
 ;;; path-dispatch.sls --- Path dispatching
 
-;; Copyright (C) 2009 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2009, 2010 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; Author: Andreas Rottmann <a.rottmann@gmx.at>
 
@@ -46,7 +46,7 @@
           (for (srfi :8 receive) expand)
           (srfi :19 time)
           (spells alist)
-          (spells foof-loop)
+          (wak foof-loop)
           (for (ocelotl net path-dispatch helpers) expand))
 
 (define (match-path-args path arg-matchers)

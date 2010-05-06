@@ -1,6 +1,6 @@
 ;;; rfc822.sls --- RFC822-style header parsing
 
-;; Copyright (C) 2009 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2009, 2010 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; Based on Public Domain code written by Taylor R. Campbell.
 
@@ -27,11 +27,9 @@
           (srfi :14 char-sets)
           (srfi :19 time)
           (spells ascii)
-          (spells lazy)
-          (spells lazy-streams)
-          (parscheme parse-errors)
-          (parscheme parser-combinators)
-          (parscheme text-parser-combinators)
+          (wak parscheme parse-errors)
+          (wak parscheme parser-combinators)
+          (wak parscheme text-parser-combinators)
           (ocelotl parser-utils))
 
 (define-condition-type &rfc822-malformed-headers &error
