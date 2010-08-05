@@ -176,20 +176,30 @@
   (uri-authority/host-string (http-connection/uri-authority connection)))
 
 (define (send-http-request connection method uri header-fields body)
-  (write-http-request method
-                      uri
-                      (adjoin-http-header-fields
-                       (list (make-http-header-field
-                              'host
-                              (http-connection/host-string connection)))
-                       header-fields
-                       (if (string? body)
-                           (list (make-http-header-field
-                                  'content-length
-                                  (number->string (string-length body) #d10)))
-                           '()))
-                      body
-                      (http-connection/output-port connection)))
+  (receive (body content-length)
+           (cond ((string? body)
+                  (let ((bytes (string->utf8 body)))
+                    (values bytes (bytevector-length bytes))))
+                 ((bytevector? body)
+                  (values body (bytevector-length body)))
+                 ((not body)
+                  (values #f 0))
+                 (else
+                  (values #f #f)))
+    (write-http-request method
+                        uri
+                        (adjoin-http-header-fields
+                         (list (make-http-header-field
+                                'host
+                                (http-connection/host-string connection)))
+                         header-fields
+                         (if content-length
+                             (list (make-http-header-field
+                                    'content-length
+                                    (number->string content-length #d10)))
+                             '()))
+                        body
+                        (http-connection/output-port connection))))
 
 (define (receive-http-response connection)
   (read-http-response (http-connection/input-port connection)))
@@ -206,7 +216,8 @@
 (define (write-http-request method uri header-fields body port)
   (write-http-request-line method uri port)
   (write-http-header-fields header-fields port)
-  (write-http-body body port)
+  (when body
+    (write-http-body body port))
   (flush-output-port port))
 
 (define (write-http-request-line method uri port)
@@ -261,9 +272,7 @@
                 "don't know how to stringify HTTP headers field" value))))
 
 (define (write-http-body body port)
-  (cond ((string? body)
-         (put-bytevector port (string->utf8 body)))
-        ((bytevector? body)
+  (cond ((bytevector? body)
          (put-bytevector port body))
         ((procedure? body)
          (body port))
