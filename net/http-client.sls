@@ -242,7 +242,8 @@
               (every string? uri))
          (string-join uri "/"))
         (else
-         (error "Invalid HTTP request URI:" uri))))
+         (assertion-violation 'http-request-uri->string
+                              "Invalid HTTP request URI:" uri))))
 
 (define (http-version->string v)
   (string-append "HTTP/"
@@ -268,8 +269,9 @@
   (cond ((string? value) value)
         ((number? value) (number->string value))
         (else
-         (error 'field-value->string
-                "don't know how to stringify HTTP headers field" value))))
+         (assertion-violation
+          'field-value->string
+          "don't know how to stringify HTTP headers field" value))))
 
 (define (write-http-body body port)
   (cond ((bytevector? body)
@@ -277,8 +279,9 @@
         ((procedure? body)
          (body port))
         (else
-         (error 'write-http-request-body
-                "don't know how to send HTTP request body" body))))
+         (assertion-violation
+          'write-http-request-body
+          "don't know how to send HTTP request body" body))))
 
 (define (read-http-response input-port)
   (parse-input-bytes-as-latin1
