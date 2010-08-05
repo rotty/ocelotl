@@ -80,7 +80,7 @@
                          (get-bytevector-all input-port))))
               ((first-http-header-field-value header-fields 'content-length #f)
                => (lambda (value)
-                    (cond ((number->string value #d10)
+                    (cond ((string->number value #d10)
                            => (lambda (content-length)
                                 (get-bytevector-n input-port content-length)))
                           (else #f))))
