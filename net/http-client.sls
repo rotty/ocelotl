@@ -84,7 +84,8 @@
                            => (lambda (content-length)
                                 (get-bytevector-n input-port content-length)))
                           (else #f))))
-              (else #f)))
+              (else ;read till end of connection
+               (get-bytevector-all input-port))))
       (begin
         (warn 'read-http-entity-body
               "Unable to determine entity length of response:" http-response)
