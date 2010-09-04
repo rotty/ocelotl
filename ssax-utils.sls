@@ -25,11 +25,11 @@
                 string-index
                 string-null?
                 string-concatenate-reverse)
-          (only (xitomatl ssax private-5-1 util)
+          (only (wak ssax private util)
                 make-char-quotator)
-          (xitomatl ssax parsing)
-          (xitomatl ssax raise)
-          (xitomatl ssax tree-trans))
+          (wak ssax parsing)
+          (wak ssax raise)
+          (wak ssax tree-trans))
 
 ;;@ Use SSAX to parse an XML document into SXML. The optional argument
 ;; @var{options} is an alist that can be used to modify the behaviour

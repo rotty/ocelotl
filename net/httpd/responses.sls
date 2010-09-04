@@ -30,7 +30,7 @@
           (spells match)
           (spells finite-types)
           (spells tracing)
-          (xitomatl ssax tree-trans)
+          (wak ssax tree-trans)
           (ocelotl net uri)
           (ocelotl net http)
           (ocelotl net httpd)
