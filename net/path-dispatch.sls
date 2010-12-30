@@ -36,12 +36,12 @@
           path-arg/number path-arg/number*
           path-arg/integer path-arg/integer*
           path-arg/iso-date path-arg/iso-date*)
-  (import (rnrs)
+  (import (for (rnrs) run expand (meta -1))
           (for (only (srfi :1)
                      find-tail
                      filter-map
                      append-reverse)
-               expand)
+               run expand)
           (srfi :2 and-let*)
           (for (srfi :8 receive) expand)
           (srfi :19 time)

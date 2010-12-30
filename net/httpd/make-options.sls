@@ -23,7 +23,7 @@
           with-server-header
           with-debug?)
   (import (rnrs)
-          (spells syntax-utils)
+          (for (spells syntax-utils) expand)
           (ocelotl net httpd options))
 
 (define (httpd-options-transformer replacer)

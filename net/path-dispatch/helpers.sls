@@ -1,6 +1,7 @@
-;;; helpers.sls --- 
+#!r6rs
+;;; helpers.sls --- path dispatcher helpers
 
-;; Copyright (C) 2009 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2009, 2010 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; Author: Andreas Rottmann <a.rottmann@gmx.at>
 
@@ -24,7 +25,7 @@
 
 (library (ocelotl net path-dispatch helpers)
   (export split-path-pattern)
-  (import (rnrs)
+  (import (for (rnrs) run (meta -1))
           (only (srfi :1) span))
 
 (define (split-path-pattern who pat unparser?)
