@@ -136,7 +136,7 @@
      (let ((address (send <soup-address>
                       (new (httpd-options-interface options)
                            (httpd-options-port options))))
-           (main-loop (g-main-loop-new #f #f)))
+           (main-loop (send <g-main-loop> (new #f #f))))
        
        
        (send address (resolve-sync #f))
@@ -161,12 +161,12 @@
           (lambda (sig)
             (log/info "Received signal {0}, exiting" sig)
             (send server (shutdown))
-            (g-main-loop-quit main-loop)
+            (send main-loop (quit))
             #f))
        
          (log/info "Waiting for requests...")
          (send server (run-async))
-         (g-main-loop-run main-loop))))))
+         (send main-loop (run)))))))
 
 (define (with-exception-guard httpd request thunk)
   (guard (c ((http-error? c)
