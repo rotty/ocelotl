@@ -1,6 +1,6 @@
 ;;; pct-coding.scm --- Unit tests for (ocelotl net pct-coding)
 
-;; Copyright (C) 2008, 2009 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2008, 2009, 2011 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; Author: Andreas Rottmann <a.rottmann@gmx.at>
 
@@ -20,6 +20,11 @@
 ;;; Commentary:
 
 ;;; Code:
+
+(import (rnrs)
+        (srfi :14 char-sets)
+        (wak trc-testing)
+        (ocelotl net pct-coding))
 
 (define-test-suite pct-coding-tests
   "Percent encoding and decoding")

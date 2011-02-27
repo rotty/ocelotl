@@ -1,6 +1,6 @@
 ;;; wt-tree.scm --- Testcases for the weight-balanced tree library
 
-;; Copyright (C) 2009 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2009, 2011 Andreas Rottmann <a.rottmann@gmx.at>
 ;;
 ;; Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994,
 ;;     1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
@@ -26,6 +26,10 @@
 ;; Test code, using maps from digit strings to the numbers they represent.
 
 ;;; Code:
+
+(import (rnrs)
+        (wak trc-testing)
+        (ocelotl wt-tree))
 
 
 ;;; Helper functions
