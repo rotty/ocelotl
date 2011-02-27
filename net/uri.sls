@@ -1,6 +1,6 @@
 ;;; uri.sls --- URI abstraction
 
-;; Copyright (C) 2009, 2010 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2009-2011 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; Author: Andreas Rottmann <a.rottmann@gmx.at>
 
@@ -118,8 +118,8 @@
              => weak-cell-ref)
             (else #f)))
 
-    (define (error message object context)
-      (rnrs:error context message object))
+    (define (error message object context . extra)
+      (apply rnrs:error context message object extra))
     
     (define (write-string s port)
       (put-string port s))
