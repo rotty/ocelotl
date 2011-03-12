@@ -1,6 +1,6 @@
 ;;; responses.sls --- HTTPd responses
 
-;; Copyright (C) 2009, 2010 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2009-2011 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; Author: Andreas Rottmann <a.rottmann@gmx.at>
 
@@ -57,7 +57,7 @@
            ,shtml
            ,@(if (null? extras)
                  '()
-                 `((p "Further Information:" ,(car extras) (br)
+                 `((p "Further Information: " ,(car extras) (br)
                       ,@(append-map (lambda (item)
                                       `(,item (br)))
                                     (cdr extras)))))))))))
