@@ -160,7 +160,7 @@
           '(int)
           (lambda (sig)
             (log/info "Received signal {0}, exiting" sig)
-            (send server (shutdown))
+            (send server (disconnect))
             (send main-loop (quit))
             #f))
        
