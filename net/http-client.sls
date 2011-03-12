@@ -1,6 +1,6 @@
 ;;; http-client.sls --- Simple HTTP client library
 
-;; Copyright (C) 2005,2009,2010 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2005,2009-2011 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; Based on Public Domain code written by Taylor R. Campbell.
 
@@ -101,7 +101,6 @@
     (call-with-http-connection authority
       (lambda (connection)
         (send-http-request connection method uri header-fields body)
-        (close-port (http-connection/output-port connection))
         (receive results (receiver (receive-http-response connection)
                                    (http-connection/input-port connection))
           (close-connection (http-connection/connection connection))
