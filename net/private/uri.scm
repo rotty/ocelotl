@@ -670,7 +670,7 @@
 (define-parser uri-parser:path-absolute
   (parser:sequence
    (parser:char= #\/)
-   (parser:optional '()
+   (parser:optional '("" "")
      (*parser
          (initial-segment uri-parser:segment-nz)
          (trailing-segments uri-parser:segments)

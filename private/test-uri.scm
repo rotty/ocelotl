@@ -21,6 +21,10 @@
                        "query"
                        "fragment")
     (string->uri "scheme://user@host:123/path/to/file?query#fragment")))
+
+(define-test-case uri-tests root-path-roundtrip ()
+  (test-equal "/" (uri->string (string->uri "/"))))
+
 
 ;;;; Merging
 
