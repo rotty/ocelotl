@@ -1,6 +1,6 @@
 ;;; soup-httpd.sls --- A http daemon based on libsoup
 
-;; Copyright (C) 2009, 2010 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2009, 2010, 2011 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; Author: Andreas Rottmann <a.rottmann@gmx.at>
 
@@ -97,7 +97,7 @@
                       (log/debug "<task {0}> cancelled" task-id)
                       (set! n-active-tasks (- n-active-tasks 1))
                       #f)
-                     ((> http-version 0)
+                     ((eq? http-version 'http-1-1)
                       (send server (unpause-message msg))
                       #t)
                      (else
@@ -114,7 +114,7 @@
                                        (continue))))
                                  task-result-consumer
                                  task-yield-handler)
-             (cond ((> http-version 0)
+             (cond ((eq? http-version 'http-1-1)
                     (send (send msg (get-response-body))
                       (set-accumulate #f))
                     (send (send msg (get-response-headers))
@@ -186,11 +186,19 @@
               request)))
     (thunk)))
 
+(define (symbol->http-version symbol)
+  (case symbol
+    ((http-1-0) (make-http-version 1 0))
+    ((http-1-1) (make-http-version 1 1))
+    (else
+     (assertion-violation 'symbol->http-version
+                          "unexpected HTTP version" symbol))))
+
 (define (handler->soup-handler handler httpd)
   (lambda (server msg path query client)
     (let* ((iport (make-soup-input-port (send msg (get-request-body))))
            (request (make-http-request
-                     (make-http-version 1 (send msg (get 'http-version)))
+                     (symbol->http-version (send msg (get 'http-version)))
                      (send msg (get 'method))
                      (soup-uri->uri (send msg (get 'uri)))
                      (soup-headers->header-fields
