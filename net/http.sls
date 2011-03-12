@@ -1,6 +1,6 @@
 ;;; http.sls --- HTTP data types
 
-;; Copyright (C) 2009, 2010 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2009-2011 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; Author: Andreas Rottmann <a.rottmann@gmx.at>
 
@@ -150,7 +150,7 @@
               (http-status/reason known-status))))
   (cond ((not reason)
          (cond ((integer? status)
-                (lookup integer->http-status status))
+                (lookup integer->http-status))
                ((symbol? status)
                 (lookup symbol->http-status))
                ((http-status? status)
