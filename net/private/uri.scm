@@ -252,7 +252,7 @@
 
 (define (merge-uris uri base-uri . strict?-option)
   (let ((uri (guarantee-uri uri 'MERGE-URIS))
-        (base-uri (guarantee-absolute-uri base-uri 'MERGE-URIS)))
+        (base-uri (guarantee-uri base-uri 'MERGE-URIS)))
     (define (make scheme authority path query)
       (make-uri scheme authority path query (uri-fragment uri)))
     (cond ((and (uri-scheme uri)
