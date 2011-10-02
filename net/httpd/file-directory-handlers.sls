@@ -1,6 +1,6 @@
 ;;; file-directory-handlers.sls --- 
 
-;; Copyright (C) 2009, 2010 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2009-2011 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; This file is based on code from the Scheme Untergrund Networking
 ;; package,
@@ -60,22 +60,20 @@
 ;;; in the file system. You may follow symlinks, but you can't back up
 ;;; past ROOT with ..'s.
 
-(define (rooted-file-handler root-dir . maybe-options)
-  (let-optionals maybe-options ((options (make-default-file-directory-options)))
-    (let ((root (pathname-as-directory root-dir)))
-      (lambda (path req)
-        (make-rooted-file-path-response root path file-serve-response req options)))))
+(define* (rooted-file-handler root-dir (options (make-default-file-directory-options)))
+  (let ((root (pathname-as-directory root-dir)))
+    (lambda (path req)
+      (make-rooted-file-path-response root path file-serve-response req options))))
 
 ;;; Dito, but also serve directory indices for directories without
 ;;; index.html.
 
-(define (rooted-file-or-directory-handler root . maybe-options)
-  (let-optionals maybe-options ((options (make-default-file-directory-options)))
-    (lambda (path req)
-      (make-rooted-file-path-response root path
-                                      file-serve-and-dir-response
-                                      req
-                                      options))))
+(define* (rooted-file-or-directory-handler root (options (make-default-file-directory-options)))
+  (lambda (path req)
+    (make-rooted-file-path-response root path
+                                    file-serve-and-dir-response
+                                    req
+                                    options)))
 
 
 ;;; Response generators
@@ -333,5 +331,5 @@
 )
 
 ;; Local Variables:
-;; scheme-indent-styles: (foof-loop)
+;; scheme-indent-specs: (foof-loop)
 ;; End:
