@@ -28,6 +28,7 @@
   (import (except (rnrs) define-record-type)
           (srfi :8 receive)
           (only (srfi :13) string-join)
+          (wak fmt)
           (spells string-utils)
           (spells record-types)
           (spells logging)
@@ -89,13 +90,12 @@
                (unless message-finished?
                  (send server (unpause-message msg)))
                (set! n-active-tasks (- n-active-tasks 1))
-               (log/debug "task {0} finished; {1} still active"
-                          task-id n-active-tasks))
-           
+               (task-log task-id "finished" n-active-tasks))
+             
              (define (task-yield-handler val)
                (cond (message-finished?
-                      (log/debug "<task {0}> cancelled" task-id)
                       (set! n-active-tasks (- n-active-tasks 1))
+                      (task-log task-id "cancelled" n-active-tasks)
                       #f)
                      ((eq? http-version 'http-1-1)
                       (send server (unpause-message msg))
@@ -122,8 +122,7 @@
                    (else
                     (send server (pause-message msg))))
              (set! n-active-tasks (+ n-active-tasks 1))
-             (log/debug "task {0} enqueued; {1} now active"
-                        task-id n-active-tasks)
+             (task-log task-id "enqueued" n-active-tasks)
              (when (not had-work?)
                (g-idle-add scheduler-idle-callback))
              task-id)))))))
@@ -159,12 +158,12 @@
          (g-install-signal-handler
           '(int)
           (lambda (sig)
-            (log/info "Received signal {0}, exiting" sig)
+            (httpd-log 'info "Received signal " sig ", exiting")
             (send server (disconnect))
             (send main-loop (quit))
             #f))
        
-         (log/info "Waiting for requests...")
+         (httpd-log 'info "Waiting for requests...")
          (send server (run-async))
          (send main-loop (run)))))))
 
@@ -204,6 +203,7 @@
                      (soup-headers->header-fields
                       (send msg (get-request-headers)))
                      iport)))
+      (log-request 'debug request #f)
       (loop continue
             ((with response
                    (with-exception-guard httpd request
@@ -257,7 +257,7 @@
            (flush)
            (send (send msg (get-response-body))
              (complete))
-           (log-request request response)))))))
+           (log-request 'info request response)))))))
 
 (define (trim-path path)
   (if (and (pair? path)
@@ -269,11 +269,13 @@
 (define (put-http-response-body iport oport body httpd)
   (body iport oport httpd))
 
-(define (log-request request response)
-  (log/request "{0} {1} {2}"
+(define (log-request level request response)
+  (request-log level
                (http-request/method request)
-               (path->string (uri-path (http-request/uri request)))
-               (http-response/status-code response)))
+               " " (path->string (uri-path (http-request/uri request)))
+               (if response
+                   (cat " " (http-response/status-code response))
+                   fmt-null)))
 
 (define (path->string path)
   (string-join path "/"))
@@ -318,9 +320,12 @@
 (define logger:ocelotl.soup-httpd.request
   (make-logger logger:ocelotl.soup-httpd 'request))
 
-(define log/debug (make-ssubst-log logger:ocelotl.soup-httpd 'debug))
-(define log/info (make-ssubst-log logger:ocelotl.soup-httpd 'info))
-(define log/request (make-ssubst-log logger:ocelotl.soup-httpd.request 'info))
+(define httpd-log (make-fmt-log logger:ocelotl.soup-httpd))
+(define request-log (make-fmt-log logger:ocelotl.soup-httpd.request))
+
+(define (task-log task-id action n-active-tasks)
+  (httpd-log 'debug
+             "task " task-id " " action ";" " " n-active-tasks " now active"))
 
 (define-record-type* task-result
   (make-task-result task-id msg val)

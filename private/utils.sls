@@ -1,6 +1,6 @@
 ;;; utils.sls --- ocelotl internal utilities 
 
-;; Copyright (C) 2009 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2009, 2011 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; Author: Andreas Rottmann <a.rottmann@gmx.at>
 
@@ -23,19 +23,21 @@
 #!r6rs
 
 (library (ocelotl private utils)
-  (export make-ssubst-log
+  (export make-fmt-log
           uri-with-directory-path)
   (import (rnrs)
           (only (srfi :1) last)
+          (wak fmt)
           (spells logging)
           (spells string-utils)
           (ocelotl net uri))
 
-(define (make-ssubst-log logger level)
-  (let ((log (make-log logger level)))
-    (lambda (msg . args)
-      (log (lambda (port)
-             (string-substitute port msg args 'braces))))))
+(define (make-fmt-log logger)
+  (let ((log (make-log logger)))
+    (lambda (level . fmts)
+      (log level
+           (lambda (port)
+             (fmt port (apply-cat fmts)))))))
 
 (define (uri-with-directory-path uri)
   (let ((path (uri-path uri)))
