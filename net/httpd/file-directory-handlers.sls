@@ -62,14 +62,14 @@
 
 (define* (rooted-file-handler root-dir (options (make-default-file-directory-options)))
   (let ((root (pathname-as-directory root-dir)))
-    (lambda (path req)
+    (lambda (path req client)
       (make-rooted-file-path-response root path file-serve-response req options))))
 
 ;;; Dito, but also serve directory indices for directories without
 ;;; index.html.
 
 (define* (rooted-file-or-directory-handler root (options (make-default-file-directory-options)))
-  (lambda (path req)
+  (lambda (path req client)
     (make-rooted-file-path-response root path
                                     file-serve-and-dir-response
                                     req

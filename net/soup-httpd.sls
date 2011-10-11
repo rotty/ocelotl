@@ -45,7 +45,8 @@
           (ocelotl net httpd)
           (ocelotl net httpd make-options)
           (ocelotl net httpd options)
-          (ocelotl net httpd responses))
+          (ocelotl net httpd responses)
+          (ocelotl net httpd client-context))
 
 (define-operation (httpd/start-task httpd proc flush))
 
@@ -193,6 +194,9 @@
      (assertion-violation 'symbol->http-version
                           "unexpected HTTP version" symbol))))
 
+(define (->client-context client)
+  (make-httpd-client-context (send client (get-host))))
+
 (define (handler->soup-handler handler httpd)
   (lambda (server msg path query client)
     (let* ((iport (make-soup-input-port (send msg (get-request-body))))
@@ -202,16 +206,18 @@
                      (soup-uri->uri (send msg (get 'uri)))
                      (soup-headers->header-fields
                       (send msg (get-request-headers)))
-                     iport)))
-      (log-request 'debug request #f)
+                     iport))
+           (context (->client-context client)))
+      (log-request 'debug request context #f)
       (loop continue
             ((with response
                    (with-exception-guard httpd request
                      (lambda ()
                        (handler (trim-path (uri-path (http-request/uri request)))
-                                request))))
+                                request
+                                context))))
              (until (http-response? response)))
-        => (soup-message-set-response! httpd msg response request iport)
+        => (soup-message-set-response! httpd msg response request context iport)
         (cond ((input-response? response)
                (continue (with-exception-guard httpd request
                            (lambda () ((input-response-handler response) iport)))))
@@ -220,7 +226,7 @@
                       "Invalid response from handler"
                       response)))))))
 
-(define (soup-message-set-response! httpd msg response request iport)
+(define (soup-message-set-response! httpd msg response request context iport)
   (let ((resp-hdrs (send msg (get-response-headers)))
         (message-finished? #f))
     (for-each (lambda (header-field)
@@ -257,7 +263,7 @@
            (flush)
            (send (send msg (get-response-body))
              (complete))
-           (log-request 'info request response)))))))
+           (log-request 'info request context response)))))))
 
 (define (trim-path path)
   (if (and (pair? path)
@@ -269,9 +275,10 @@
 (define (put-http-response-body iport oport body httpd)
   (body iport oport httpd))
 
-(define (log-request level request response)
+(define (log-request level request context response)
   (request-log level
-               (http-request/method request)
+               (httpd-client-context/host context)
+               " " (http-request/method request)
                " " (path->string (uri-path (http-request/uri request)))
                (if response
                    (cat " " (http-response/status-code response))

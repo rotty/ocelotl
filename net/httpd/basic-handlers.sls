@@ -1,9 +1,10 @@
+#!r6rs
 ;;; basic-handlers.sls --- Basic HTTPd handlers
 
 ;; Copyright (c) 1995 by Olin Shivers.
 ;; Copyright (c) 1996-2002 by Mike Sperber.
 ;; Copyright (c) 2002 by Andreas Bernauer.
-;; Copyright (C) 2009,2010 Andreas Rottmann.
+;; Copyright (C) 2009-2011 Andreas Rottmann.
 
 ;; The code in this file is based on code from SUnet, hence originally
 ;; licensed under the new-style BSD license.
@@ -35,7 +36,6 @@
 ;; the details of the client request.
 
 ;;; Code:
-#!r6rs
 
 (library (ocelotl net httpd basic-handlers)
   (export make-predicate-handler
@@ -57,22 +57,22 @@
 ;; if #t, handler is called
 ;; if #f, default-handler is called
 (define (make-predicate-handler predicate handler default-handler)
-  (lambda (path req)
-    (if (predicate path req)
-        (handler path req)
-        (default-handler path req))))
+  (lambda (path req client)
+    (if (predicate path req client)
+        (handler path req client)
+        (default-handler path req client))))
 
 ;; same as MAKE-PREDICATE-HANDLER except that the predicate is only
 ;; called with the path:
 ;; predicate: path --> boolean
 (define (make-path-predicate-handler predicate handler default-handler)
   (make-predicate-handler
-   (lambda (path req) (predicate path)) handler default-handler))
+   (lambda (path req client) (predicate path)) handler default-handler))
 
 ;; selects handler according to host-field of http-request
 (define (make-host-name-handler hostname handler default-handler)
   (make-predicate-handler 
-   (lambda (path req)
+   (lambda (path req client)
      ;; we expect only one host-header-field
      (let ((body (string-trim (get-header (http-request/header-fields req) 'host))))
        (or (string-ci=? hostname body)
@@ -93,17 +93,17 @@
 ;; if path-prefix matches, handler is called without the path-prefix
 (define (make-path-prefix-handler path-prefix handler default-handler)
   (cond ((string? path-prefix)
-         (lambda (path req)
+         (lambda (path req client)
            (if (and (pair? path) (string=? path-prefix (car path)))
-               (handler (cdr path) req)
-               (default-handler path req))))
+               (handler (cdr path) req client)
+               (default-handler path req client))))
         (else
-         (lambda (path req)
+         (lambda (path req client)
            (cond ((list-match-prefix string=? path-prefix path)
                   => (lambda (path-rest)
-                       (handler path-rest req)))
+                       (handler path-rest req client)))
                  (else
-                  (default-handler path req)))))))
+                  (default-handler path req client)))))))
 
 (define (list-match-prefix elt=? l1 l2)
   (cond ((null? l1) l2)
@@ -136,15 +136,15 @@
    handler-alist))
 
 (define (make-path-dispatch-handler dispatcher default-handler)
-  (lambda (path request)
+  (lambda (path request client)
     (cond ((dispatcher path)
            => (lambda (handler) (handler path request)))
           (else
-           (default-handler path request)))))
+           (default-handler path request client)))))
 
 ;; The null request handler -- handles nothing, sends back an error response.
 ;; Can be useful as the default in table-driven request handlers.
-(define (null-request-handler path req)
-  (make-error-response (http-status not-found) req))
+(define (null-request-handler path req client)
+  (make-error-response (http-status not-found) req client))
 
 )
