@@ -1,6 +1,7 @@
+#!r6rs
 ;;; file-directory-handlers.sls --- 
 
-;; Copyright (C) 2009-2011 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2009-2011, 2015 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; This file is based on code from the Scheme Untergrund Networking
 ;; package,
@@ -20,7 +21,6 @@
 ;; to `stat(2)'. I should add such API to (spells filesys).
 
 ;;; Code:
-#!r6rs
 
 (library (ocelotl net httpd file-directory-handlers)
   (export rooted-file-handler

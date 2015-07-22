@@ -1,6 +1,7 @@
+#!r6rs
 ;;; http-client.sps --- Simple HTTP client demo
 
-;; Copyright (C) 2009 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2009, 2015 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; Author: Andreas Rottmann <a.rottmann@gmx.at>
 
@@ -18,7 +19,6 @@
 ;; the standard output port.
 
 ;;; Code:
-#!r6rs
 
 (import (rnrs)
         (spells ports)

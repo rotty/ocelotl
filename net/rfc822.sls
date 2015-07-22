@@ -1,6 +1,7 @@
+#!r6rs
 ;;; rfc822.sls --- RFC822-style header parsing
 
-;; Copyright (C) 2009, 2010 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2009, 2010, 2015 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; Based on Public Domain code written by Taylor R. Campbell.
 
@@ -13,7 +14,6 @@
 ;;; Commentary:
 
 ;;; Code:
-#!r6rs
 
 (library (ocelotl net rfc822)
   (export read-rfc822-headers

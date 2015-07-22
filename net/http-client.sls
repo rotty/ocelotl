@@ -1,6 +1,7 @@
+#!r6rs
 ;;; http-client.sls --- Simple HTTP client library
 
-;; Copyright (C) 2005,2009-2011 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2005,2009-2011,2015 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; Based on Public Domain code written by Taylor R. Campbell.
 
@@ -13,7 +14,6 @@
 ;;; Commentary:
 
 ;;; Code:
-#!r6rs
 
 (library (ocelotl net http-client)
   (export

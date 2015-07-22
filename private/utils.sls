@@ -1,6 +1,7 @@
+#!r6rs
 ;;; utils.sls --- ocelotl internal utilities 
 
-;; Copyright (C) 2009, 2011 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2009, 2011, 2015 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; Author: Andreas Rottmann <a.rottmann@gmx.at>
 
@@ -20,7 +21,6 @@
 ;;; Commentary:
 
 ;;; Code:
-#!r6rs
 
 (library (ocelotl private utils)
   (export make-fmt-log

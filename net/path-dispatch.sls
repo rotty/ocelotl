@@ -1,6 +1,7 @@
+#!r6rs
 ;;; path-dispatch.sls --- Path dispatching
 
-;; Copyright (C) 2009, 2010 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2009, 2010, 2015 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; Author: Andreas Rottmann <a.rottmann@gmx.at>
 
@@ -23,7 +24,6 @@
 ;; by the one in PLT Scheme's webserver.
 
 ;;; Code:
-#!r6rs
 
 (library (ocelotl net path-dispatch)
   (export path-dispatcher

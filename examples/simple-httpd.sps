@@ -1,6 +1,7 @@
+#!r6rs
 ;;; simple-httpd.sls --- Simple HTTP server
 
-;; Copyright (C) 2010 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2010, 2015 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; Author: Andreas Rottmann <a.rottmann@gmx.at>
 
@@ -15,7 +16,6 @@
 ;; This program runs a simple HTTP server serving static content.
 
 ;;; Code:
-#!r6rs
 
 (import (rnrs)
         (ocelotl net soup-httpd)

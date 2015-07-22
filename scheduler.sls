@@ -1,6 +1,7 @@
+#!r6rs
 ;;; scheduler.sls --- Simple round-robin scheduler
 
-;; Copyright (C) 2009, 2010 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2009, 2010, 2015 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; Author: Andreas Rottmann <a.rottmann@gmx.at>
 
@@ -16,7 +17,6 @@
 ;; meant to be invoked from some kind of external main-loop.
 
 ;;; Code:
-#!r6rs
 
 (library (ocelotl scheduler)
   (export make-scheduler

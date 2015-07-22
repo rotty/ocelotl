@@ -1,6 +1,7 @@
+#!r6rs
 ;;; httpd.sls --- HTTPd operations
 
-;; Copyright (C) 2009 Andreas Rottmann <a.rottmann@gmx.at>
+;; Copyright (C) 2009, 2015 Andreas Rottmann <a.rottmann@gmx.at>
 
 ;; Author: Andreas Rottmann <a.rottmann@gmx.at>
 
@@ -20,7 +21,6 @@
 ;;; Commentary:
 
 ;;; Code:
-#!r6rs
 
 (library (ocelotl net httpd)
   (export httpd/options

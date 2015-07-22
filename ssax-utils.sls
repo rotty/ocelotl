@@ -1,4 +1,5 @@
-;; Copyright (C) 2008-2010 Andreas Rottmann <a dot rottmann at gmx dot at>
+#!r6rs
+;; Copyright (C) 2008-2010, 2015 Andreas Rottmann <a dot rottmann at gmx dot at>
 ;; Copyright (C) 2004 Andy Wingo <wingo at pobox dot com>
 
 ;; This file is based on SSAX's SXML-to-HTML.scm and is in the public
@@ -12,7 +13,6 @@
 ;; A simple interface to XML parsing and serialization.
 ;;
 ;;; Code:
-#!r6rs
 
 (library (ocelotl ssax-utils)
   (export sxml->xml
